@@ -39,6 +39,7 @@
       tags: [core, universe, build_tools, ccache]
 
     - role: autoware.dev_env.agnocast
+      when: rosdistro == 'humble'
       tags: [core, universe, agnocast]
 
     # Recommended development tooling
