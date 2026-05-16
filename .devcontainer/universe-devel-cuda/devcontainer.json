@@ -4,7 +4,7 @@
     "dockerfile": "../Dockerfile",
     "args": { "BASE_IMAGE": "ghcr.io/autowarefoundation/autoware:universe-devel-cuda" }
   },
-  "remoteUser": "autoware",
+  "remoteUser": "aw",
   "hostRequirements": {
     "gpu": true
   },
