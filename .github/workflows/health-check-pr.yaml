@@ -26,6 +26,7 @@ jobs:
         uses: step-security/changed-files@v47
         with:
           files: |
+            .dockerignore
             repositories/*.repos
             .github/workflows/health-check.yaml
             .github/workflows/health-check-pr.yaml

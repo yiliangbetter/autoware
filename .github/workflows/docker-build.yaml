@@ -49,6 +49,10 @@ on:
         description: Registry image name
         type: string
         default: autoware
+      tag-date:
+        description: Date suffix to apply to pushed image tags
+        type: string
+        default: ""
       needs-source:
         description: Whether to clone source repos via vcs import
         type: boolean
@@ -197,9 +201,13 @@ jobs:
       - name: 📋 Prepare build metadata
         id: meta
         run: |
+          tag_date="${{ inputs.tag-date }}"
+          if [ -z "$tag_date" ]; then
+            tag_date=$(date +'%Y%m%d')
+          fi
           ref_name="${GITHUB_REF_NAME//\//-}"
           echo "ref_name=${ref_name}" >> "$GITHUB_OUTPUT"
-          echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+          echo "date=${tag_date}" >> "$GITHUB_OUTPUT"
           echo "build_start=$(date +%s)" >> "$GITHUB_OUTPUT"
           echo "disk_before_kb=$(df --output=avail / | tail -1 | tr -d ' ')" >> "$GITHUB_OUTPUT"
 
