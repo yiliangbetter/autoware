@@ -18,6 +18,10 @@ on:
         description: Registry image name
         type: string
         default: autoware
+      tag-date:
+        description: Date suffix used by the per-architecture image tags
+        type: string
+        default: ""
 
 jobs:
   manifest:
@@ -28,6 +32,7 @@ jobs:
     env:
       IMAGE: ghcr.io/${{ github.repository_owner }}/${{ inputs.target-image }}
       ROS_DISTRO: ${{ inputs.ros-distro }}
+      TAG_DATE: ${{ inputs.tag-date }}
       VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
     steps:
       - name: 📥 Check out repository
@@ -67,7 +72,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          date=$(date +'%Y%m%d')
+          date="${TAG_DATE:-}"
+          if [ -z "$date" ]; then
+            date=$(date +'%Y%m%d')
+          fi
           ref=""
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.ref_name }}" != "main" ]]; then
             ref="${GITHUB_REF_NAME//\//-}"
