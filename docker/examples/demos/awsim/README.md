@@ -40,4 +40,4 @@ ros2 launch autoware_launch e2e_simulator.launch.xml \
   map_path:=/home/aw/autoware_data/maps/Shinjuku-Map/map
 ```
 
-`map_path` points inside the container; it maps to `~/autoware_data/maps/Shinjuku-Map/map` on the host via the `volumes:` mount.
+`map_path` points inside the container; it maps to `~/autoware_data/maps/Shinjuku-Map/map` on the host through the `~/autoware_data` volume.
