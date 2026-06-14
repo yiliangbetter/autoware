@@ -17,8 +17,13 @@ services:
       - bash
       - -c
       - |
+        MAP_PATH=/home/aw/autoware_data/maps/sample-map-planning
+        LEGACY_MAP_PATH=/home/aw/autoware_data/maps/demos/sample-map-planning
+        if [ ! -e "${MAP_PATH}" ] && [ -d "${LEGACY_MAP_PATH}" ]; then
+          ln -s demos/sample-map-planning "${MAP_PATH}"
+        fi
         ros2 launch autoware_launch planning_simulator.launch.xml \
-          map_path:=/home/aw/autoware_data/maps/sample-map-planning \
+          map_path:="${MAP_PATH}" \
           vehicle_model:=sample_vehicle \
           sensor_model:=sample_sensor_kit
         exec bash
