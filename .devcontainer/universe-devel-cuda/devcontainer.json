@@ -17,11 +17,18 @@
     "--gpus",
     "all"
   ],
-  "customizations": {
-    "vscode": {
-      "settings.json": {
-        "terminal.integrated.profiles.linux": { "bash": { "path": "/bin/bash" } }
-      }
+"customizations": {
+  "vscode": {
+    "extensions": [
+      "llvm-vs-code-extensions.vscode-clangd",
+      "ms-vscode.cpptools",
+      "ms-iot.vscode-ros"
+    ],
+    "settings": {
+      "clangd.path": "/usr/bin/clangd",
+      "clangd.arguments": ["--background-index", "--compile-commands-dir=${workspaceFolder}"],
+      "C_Cpp.intelliSenseEngine": "disabled"
     }
   }
+}
 }
