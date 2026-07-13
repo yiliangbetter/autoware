@@ -229,6 +229,7 @@ jobs:
           TAG_DATE: ${{ steps.meta.outputs.date }}
           TAG_VERSION: ${{ steps.meta.outputs.version }}
           TAG_REF: ${{ steps.meta.outputs.ref }}
+          TAG_SHA: ${{ github.sha }}
           USE_REGISTRY_CONTEXTS: ${{ inputs.bake-group != 'ci-base' }}
         with:
           source: .
