@@ -40,3 +40,18 @@ In the future, to update all source repositories to their latest versions as def
 ```bash
 vcs pull src
 ```
+
+> **Note**
+> Workspaces created before Agnocast moved from
+> `src/middleware/external/agnocast` to `src/core/agnocast` must remove the old
+> checkout before importing the current manifest. Back up any local changes,
+> then run:
+>
+> ```bash
+> rm -rf src/middleware/external/agnocast
+> vcs import src < repositories/autoware.repos
+> ```
+>
+> `vcs import` does not remove repositories that are no longer in the manifest.
+> Keeping both Agnocast checkouts makes `colcon` fail because they contain
+> duplicate package names.
