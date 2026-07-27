@@ -33,3 +33,15 @@
       Suites: {{ ansible_distribution_release }}
       Components: main
       Signed-By: /usr/share/keyrings/ros-snapshot-archive-keyring.gpg
+
+# Force a refresh here: writing the .sources file alone does not index it.
+# install_rmw's next apt task (rmw_implementation) uses cache_valid_time: 3600, and
+# Docker locked builds share a BuildKit apt-lists cache with an earlier apt-get update
+# in the same Dockerfile, so that task can skip refresh. Without indexes for
+# snapshots.ros.org, the origin pin matches nothing and ROS packages install from the
+# rolling packages.ros.org repo while the build still reports as locked. install_rmw
+# also has no version_lock verify, so the drift is silent.
+- name: Refresh apt lists so the dated snapshot is indexed
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
