@@ -70,4 +70,4 @@ ros2 launch autoware_launch planning_simulator.launch.xml \
   sensor_model:=sample_sensor_kit
 ```
 
-`map_path` points inside the container; it maps to `~/autoware_data/maps/sample-map-planning` on the host via the `volumes:` mount.
+`map_path` points inside the container; it maps to `~/autoware_data/maps/sample-map-planning` on the host through the `~/autoware_data` volume.
