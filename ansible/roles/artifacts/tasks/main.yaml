@@ -319,18 +319,58 @@
   changed_when: false
 
 # ptv3
-- name: Download ptv3 model bundle ({{ revision }})
-  vars:
-    revision: v4.0
-  ansible.builtin.command:
-    cmd: >-
-      hf download AutowareFoundation/ptv3
-      --revision {{ revision }}
-      --local-dir "{{ data_dir }}/ptv3"
-  environment:
-    PATH: "{{ ansible_facts.env.HOME }}/.local/bin:{{ ansible_facts.env.PATH }}"
-    HF_TOKEN: "{{ lookup('env', 'HF_TOKEN') }}"
-  changed_when: false
+# Keep Web.Auto v3 / backbone naming until repositories/autoware.repos pins a
+# universe release that loads the encoder rename (universe#12973). Tip still
+# pins universe 0.52.1, which expects ptv3_backbone.onnx and
+# ml_package_ptv3_backbone.param.yaml under data_path/ptv3. HF
+# AutowareFoundation/ptv3@v4.0 only publishes encoder-named files.
+- name: Create ptv3 directory inside {{ data_dir }}
+  ansible.builtin.file:
+    path: "{{ data_dir }}/ptv3"
+    mode: "755"
+    state: directory
+
+- name: Download ptv3/ptv3_backbone.onnx
+  ansible.builtin.get_url:
+    url: https://awf.ml.dev.web.auto/perception/models/ptv3/v3/ptv3_backbone.onnx
+    dest: "{{ data_dir }}/ptv3/ptv3_backbone.onnx"
+    mode: "644"
+    checksum: sha256:ed780f9be9c499a43c107a77f1e17f4243f0fc350d34a0ffa20940d70b6d987e
+
+- name: Download ptv3/ptv3_det3d_head.onnx
+  ansible.builtin.get_url:
+    url: https://awf.ml.dev.web.auto/perception/models/ptv3/v3/ptv3_det3d_head.onnx
+    dest: "{{ data_dir }}/ptv3/ptv3_det3d_head.onnx"
+    mode: "644"
+    checksum: sha256:d3e4fdac1f331ac6d4020d081c1b252262871dd85405ebb211f13e2383f1f2b9
+
+- name: Download ptv3/ptv3_seg3d_head.onnx
+  ansible.builtin.get_url:
+    url: https://awf.ml.dev.web.auto/perception/models/ptv3/v3/ptv3_seg3d_head.onnx
+    dest: "{{ data_dir }}/ptv3/ptv3_seg3d_head.onnx"
+    mode: "644"
+    checksum: sha256:d63f3abf21e7af3fab6e9ed05e850f155b9e896ba47f1cf205a1bdefbe37df03
+
+- name: Download ptv3/ml_package_ptv3_backbone.param.yaml
+  ansible.builtin.get_url:
+    url: https://awf.ml.dev.web.auto/perception/models/ptv3/v3/ml_package_ptv3_backbone.param.yaml
+    dest: "{{ data_dir }}/ptv3/ml_package_ptv3_backbone.param.yaml"
+    mode: "644"
+    checksum: sha256:60e6bab755461c2bb08a74633e7620593203e108b851b094d0d12649a6affb99
+
+- name: Download ptv3/ml_package_ptv3_det3d_head.param.yaml
+  ansible.builtin.get_url:
+    url: https://awf.ml.dev.web.auto/perception/models/ptv3/v3/ml_package_ptv3_det3d_head.param.yaml
+    dest: "{{ data_dir }}/ptv3/ml_package_ptv3_det3d_head.param.yaml"
+    mode: "644"
+    checksum: sha256:e358c31b6c64116801585490da94167dfeb95d9068fc5a38a3fc5a920a59d940
+
+- name: Download ptv3/ml_package_ptv3_seg3d_head.param.yaml
+  ansible.builtin.get_url:
+    url: https://awf.ml.dev.web.auto/perception/models/ptv3/v3/ml_package_ptv3_seg3d_head.param.yaml
+    dest: "{{ data_dir }}/ptv3/ml_package_ptv3_seg3d_head.param.yaml"
+    mode: "644"
+    checksum: sha256:1af41163eb10f9104e693012156b725f34ab0027da9933d4c7b7b35caa163d78
 
 # lidar_frnet
 - name: Download lidar_frnet model bundle ({{ revision }})

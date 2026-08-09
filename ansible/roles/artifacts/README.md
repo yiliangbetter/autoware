@@ -2,7 +2,7 @@
 
 The Autoware perception stack uses models for inference. These models are downloaded by running `ansible-playbook autoware.dev_env.install_dev_env --tags artifacts`.
 
-The models are hosted on [Hugging Face](https://huggingface.co/AutowareFoundation) under the `AutowareFoundation` organization. `diffusion_planner` and `tensorrt_vad` have not been migrated yet and are still hosted by Web.Auto.
+The models are hosted on [Hugging Face](https://huggingface.co/AutowareFoundation) under the `AutowareFoundation` organization. `diffusion_planner`, `tensorrt_vad`, and `ptv3` are still hosted by Web.Auto — `ptv3` stays on the v3 backbone layout until `autoware_universe` in `repositories/autoware.repos` picks up the encoder rename.
 
 Default `data_dir` location is `~/autoware_data/ml_models` (part of the asset-typed `~/autoware_data/` layout: `assets/`, `maps/`, `ml_models/`, `recordings/`, `scenarios/`).
 
