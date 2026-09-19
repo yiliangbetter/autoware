@@ -45,6 +45,9 @@ variable "TAG_VERSION" {
 variable "TAG_REF" {
   default = ""
 }
+variable "TAG_SHA" {
+  default = ""
+}
 
 // When true, cross-group context references pull pre-built images from the
 // registry instead of rebuilding via target:. Set in CI where each group
@@ -53,8 +56,6 @@ variable "USE_REGISTRY_CONTEXTS" {
   default = false
 }
 
-// IMPORTANT: The first element must always be the plain name-distro-platform tag
-// because ctx() uses tags(name)[0] to construct docker-image:// references.
 function "tags" {
   params = [name]
   result = compact(concat(
@@ -63,14 +64,20 @@ function "tags" {
     REGISTRY != "" && TAG_DATE != "" && TAG_REF == "" ? ["${REGISTRY}:${name}-${ROS_DISTRO}-${TAG_DATE}-${PLATFORM}"] : [],
     REGISTRY != "" && TAG_VERSION != "" ? ["${REGISTRY}:${name}-${ROS_DISTRO}-${TAG_VERSION}-${PLATFORM}"] : [],
     REGISTRY != "" && TAG_REF != "" ? ["${REGISTRY}:${name}-${ROS_DISTRO}-${TAG_REF}-${PLATFORM}"] : [],
+    REGISTRY != "" && TAG_SHA != "" ? ["${REGISTRY}:${name}-${ROS_DISTRO}-${TAG_SHA}-${PLATFORM}"] : [],
   ))
+}
+
+function "ctx_tag" {
+  params = [name]
+  result = REGISTRY != "" && TAG_SHA != "" ? "${REGISTRY}:${name}-${ROS_DISTRO}-${TAG_SHA}-${PLATFORM}" : tags(name)[0]
 }
 
 // Returns "docker-image://..." when USE_REGISTRY_CONTEXTS is true (CI),
 // or "target:..." when false (local builds).
 function "ctx" {
   params = [name]
-  result = USE_REGISTRY_CONTEXTS ? "docker-image://${tags(name)[0]}" : "target:${name}"
+  result = USE_REGISTRY_CONTEXTS ? "docker-image://${ctx_tag(name)}" : "target:${name}"
 }
 
 group "default" {
